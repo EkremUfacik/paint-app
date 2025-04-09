@@ -191,41 +191,41 @@ const SVGColoringCanvas = ({
 
         // Her iki durumda da turuncu kenarlık
         path.setAttribute("stroke", "#FF9500");
-        path.setAttribute("stroke-width", "3");
-        path.setAttribute("stroke-dasharray", "3,3");
+        path.setAttribute("stroke-width", "1");
+        path.setAttribute("stroke-dasharray", "1");
 
         // Etiket ekle
-        if (svgContainer) {
-          // Renk numarasını path üzerine göster
-          const bbox = path.getBBox();
+        // if (svgContainer) {
+        //   // Renk numarasını path üzerine göster
+        //   const bbox = path.getBBox();
 
-          // Mevcut numara etiketlerini temizle
-          const existingLabel = svgContainer.querySelector(`#label-${pathId}`);
-          if (existingLabel) {
-            existingLabel.remove();
-          }
+        //   // Mevcut numara etiketlerini temizle
+        //   const existingLabel = svgContainer.querySelector(`#label-${pathId}`);
+        //   if (existingLabel) {
+        //     existingLabel.remove();
+        //   }
 
-          // Yeni etiket oluştur
-          const text = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "text"
-          );
-          text.setAttribute("id", `label-${pathId}`);
-          text.setAttribute("x", String(bbox.x + bbox.width / 2));
-          text.setAttribute("y", String(bbox.y + bbox.height / 2));
-          text.setAttribute("text-anchor", "middle");
-          text.setAttribute("dominant-baseline", "middle");
-          text.setAttribute("font-size", "14");
-          text.setAttribute("font-weight", "bold");
-          text.setAttribute("fill", "black");
-          text.setAttribute("stroke", "white");
-          text.setAttribute("stroke-width", "0.5");
-          text.setAttribute("pointer-events", "none");
-          text.setAttribute("class", "color-label");
-          text.textContent = isColored ? "✓" : String(selectedColorIndex + 1);
+        //   // Yeni etiket oluştur
+        //   const text = document.createElementNS(
+        //     "http://www.w3.org/2000/svg",
+        //     "text"
+        //   );
+        //   text.setAttribute("id", `label-${pathId}`);
+        //   text.setAttribute("x", String(bbox.x + bbox.width / 2));
+        //   text.setAttribute("y", String(bbox.y + bbox.height / 2));
+        //   text.setAttribute("text-anchor", "middle");
+        //   text.setAttribute("dominant-baseline", "middle");
+        //   text.setAttribute("font-size", "14");
+        //   text.setAttribute("font-weight", "bold");
+        //   text.setAttribute("fill", "black");
+        //   text.setAttribute("stroke", "white");
+        //   text.setAttribute("stroke-width", "0.5");
+        //   text.setAttribute("pointer-events", "none");
+        //   text.setAttribute("class", "color-label");
+        //   text.textContent = isColored ? "✓" : String(selectedColorIndex + 1);
 
-          svgContainer.appendChild(text);
-        }
+        //   svgContainer.appendChild(text);
+        // }
       } else {
         // İlgili renk için değil veya hiç renk seçili değil
 
@@ -299,7 +299,40 @@ const SVGColoringCanvas = ({
     }
   };
 
-  // Tamamen yeni handlePathClick fonksiyonu
+  // SVG renk durumunu kontrol eden yardımcı fonksiyon ekleyin
+  const checkCompletedColors = () => {
+    if (!svgRef.current) return null;
+
+    // Tamamlanan renkleri topla
+    const completedColors: string[] = [];
+
+    // SVG'deki tüm renkleri kontrol et
+    customPalette.forEach((color) => {
+      // O renkteki tüm path'leri bul
+      const colorPaths = svgRef.current?.querySelectorAll(
+        `path[data-color="${color}"]`
+      );
+      if (!colorPaths || colorPaths.length === 0) return;
+
+      // Bu renkteki tüm path'ler boyalı mı kontrol et
+      let allColored = true;
+      colorPaths.forEach((colorPath) => {
+        const pathId = colorPath.getAttribute("id");
+        if (pathId && !coloredPaths[pathId]) {
+          allColored = false;
+        }
+      });
+
+      // Tüm path'ler boyalıysa, tamamlanan renk olarak işaretle
+      if (allColored) {
+        completedColors.push(color);
+      }
+    });
+
+    return completedColors;
+  };
+
+  // SVG'de path tıklama işleyicisi
   const handlePathClick = (pathId: string) => {
     console.log(`handlePathClick çağrıldı: pathId=${pathId}`);
 
@@ -346,7 +379,7 @@ const SVGColoringCanvas = ({
       path.setAttribute("stroke", "#333");
       path.setAttribute("stroke-width", "1");
 
-      // Boyanan alanın durumunu state'e kaydet - ÖNEMLİ
+      // Boyanan alanın durumunu state'e kaydet
       setColoredPaths((prev) => ({
         ...prev,
         [pathId]: pathOriginalColor,
@@ -360,6 +393,44 @@ const SVGColoringCanvas = ({
       );
     }
   };
+
+  // coloredPaths değiştiğinde tamamlanan renkleri kontrol et
+  useEffect(() => {
+    // Hiç boyama yoksa işlem yapma
+    if (Object.keys(coloredPaths).length === 0) return;
+
+    // Tamamlanan renkleri bul
+    const completedColors = checkCompletedColors();
+
+    // Tamamlanan renk yoksa işlemi sonlandır
+    if (!completedColors || completedColors.length === 0) return;
+
+    console.log("Tamamlanan renkler:", completedColors);
+
+    // Paletten tamamlanan renkleri kaldır
+    const newPalette = customPalette.filter(
+      (color) => !completedColors.includes(color)
+    );
+
+    // Eğer palette değişti ise güncelle
+    if (newPalette.length !== customPalette.length) {
+      console.log(
+        "Palette güncelleniyor - kaldırılan renkler:",
+        completedColors
+      );
+      setCustomPalette(newPalette);
+
+      // Eğer seçili renk kaldırıldıysa, seçimi temizle
+      if (selectedColor && completedColors.includes(selectedColor)) {
+        console.log("Seçili renk tamamlandı, seçim temizleniyor");
+        setSelectedColor(null);
+        setSelectedColorIndex(null);
+      }
+    }
+
+    // Sadece coloredPaths değiştiğinde çalıştır
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coloredPaths]);
 
   const handleReset = () => {
     setHasChanges(false);
@@ -488,10 +559,7 @@ const SVGColoringCanvas = ({
             </div>
           )}
 
-          <div
-            className="w-full"
-            style={{ maxHeight: "600px", overflow: "auto" }}
-          >
+          <div className="w-full" style={{ overflow: "auto" }}>
             <div className="svg-wrapper relative">
               <div
                 ref={containerRef}
@@ -501,10 +569,9 @@ const SVGColoringCanvas = ({
                 {!isLoading && svgContent && (
                   <svg
                     ref={svgRef}
-                    viewBox="0 0 1024 1536"
+                    viewBox="0 0 1024 1024"
                     preserveAspectRatio="xMidYMid meet"
-                    className="w-full h-auto"
-                    style={{ cursor: "pointer" }}
+                    className="w-full h-auto cursor-pointer p-4"
                     onClick={(e) => {
                       // SVG içindeki tıklamalarda event target'ı doğrudan al
                       const target = e.target as SVGElement;
