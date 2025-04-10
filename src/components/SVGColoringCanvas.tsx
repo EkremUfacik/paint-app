@@ -39,7 +39,6 @@ const SVGColoringCanvas = ({
   const [svgContent, setSvgContent] = useState<string | null>(
     initialSvgContent || null
   );
-  const [pathNumbers, setPathNumbers] = useState<Record<string, number>>({});
   const [customPalette, setCustomPalette] = useState<string[]>(palette);
   const [coloredPaths, setColoredPaths] = useState<Record<string, string>>({});
 
@@ -89,7 +88,6 @@ const SVGColoringCanvas = ({
     // SVG'nin kendisine pointer-events özelliği ekle
     svgRef.current.style.pointerEvents = "auto";
 
-    const newPathNumbers: Record<string, number> = {};
     const uniqueColors: string[] = [];
 
     paths.forEach((path, index) => {
@@ -147,11 +145,16 @@ const SVGColoringCanvas = ({
         setCustomPalette(uniqueColors);
       } else {
         console.log("Dışarıdan sağlanan palette kullanılıyor:", palette);
+        // Dışarıdan bir palette sağlanmışsa, o palette'i kullan
+        setCustomPalette(palette);
       }
+    } else {
+      console.log(
+        "Özgün renkler bulunamadı, verilen palette kullanılacak:",
+        palette
+      );
+      setCustomPalette(palette);
     }
-
-    setPathNumbers(newPathNumbers);
-    console.log("Path renk numaraları:", newPathNumbers);
   }, [svgContent, palette]);
 
   // SVG container ve wrapper için stil değişikliği
@@ -529,17 +532,24 @@ const SVGColoringCanvas = ({
         <h3 className="text-lg font-semibold mb-3 text-center">
           Boyama Kılavuzu
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {customPalette.map((color, index) => (
-            <div key={index} className="flex items-center space-x-2">
+        {customPalette.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            {customPalette.map((color, index) => (
               <div
-                className="w-6 h-6 rounded-full"
-                style={{ backgroundColor: color }}
-              ></div>
-              <span className="text-sm font-medium">Renk {index + 1}</span>
-            </div>
-          ))}
-        </div>
+                key={index}
+                className="flex items-center space-x-2 border p-2 rounded hover:bg-gray-50"
+              >
+                <div
+                  className="w-8 h-8 rounded-full border border-gray-300 shadow-sm"
+                  style={{ backgroundColor: color }}
+                ></div>
+                <span className="text-sm font-medium">Renk {index + 1}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500">Renk bulunamadı</p>
+        )}
       </div>
     );
   };
@@ -596,9 +606,7 @@ const SVGColoringCanvas = ({
           </div>
 
           {/* Renk Kılavuzu - SVG yüklendiğinde göster */}
-          {!isLoading &&
-            Object.keys(pathNumbers).length > 0 &&
-            renderColorGuide()}
+          {!isLoading && svgContent && renderColorGuide()}
         </div>
 
         <div className="p-4 bg-gray-50 border-t border-gray-200">
@@ -611,23 +619,27 @@ const SVGColoringCanvas = ({
           </p>
 
           <div className="flex justify-center gap-4 flex-wrap mb-6">
-            {customPalette.map((color, index) => (
-              <button
-                key={index}
-                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-all ${
-                  selectedColor === color
-                    ? "ring-4 ring-blue-500 scale-110"
-                    : "hover:scale-105"
-                }`}
-                style={{ backgroundColor: color }}
-                onClick={() => handleColorSelect(color, index)}
-                aria-label={`Renk ${index + 1}`}
-              >
-                <span className="text-white text-xl font-bold drop-shadow-md">
-                  {index + 1}
-                </span>
-              </button>
-            ))}
+            {customPalette.length > 0 ? (
+              customPalette.map((color, index) => (
+                <button
+                  key={index}
+                  className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-all ${
+                    selectedColor === color
+                      ? "ring-4 ring-blue-500 scale-110"
+                      : "hover:scale-105"
+                  }`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => handleColorSelect(color, index)}
+                  aria-label={`Renk ${index + 1}`}
+                >
+                  <span className="text-white text-xl font-bold drop-shadow-md">
+                    {index + 1}
+                  </span>
+                </button>
+              ))
+            ) : (
+              <p className="text-gray-500">Renk paleti bulunamadı</p>
+            )}
           </div>
 
           <div className="flex justify-center gap-4">

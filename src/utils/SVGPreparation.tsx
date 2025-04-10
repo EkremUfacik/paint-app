@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface SVGPreparationProps {
   onSVGProcessed?: (
@@ -6,6 +6,7 @@ interface SVGPreparationProps {
     fileName: string,
     extractedColors: string[]
   ) => void;
+  initialSvgContent?: string;
 }
 
 /**
@@ -14,13 +15,25 @@ interface SVGPreparationProps {
  * SVG'deki her path'e id ve data-color ekler.
  * Ayrıca renkli SVG'yi boyama uygulaması için uygun olan siyah-beyaz formata dönüştürür.
  */
-const SVGPreparation: React.FC<SVGPreparationProps> = ({ onSVGProcessed }) => {
+const SVGPreparation: React.FC<SVGPreparationProps> = ({
+  onSVGProcessed,
+  initialSvgContent,
+}) => {
   const [svgContent, setSvgContent] = useState<string>("");
   const [processedSvg, setProcessedSvg] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [extractedColors, setExtractedColors] = useState<string[]>([]);
   const [originalFileName, setOriginalFileName] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // initialSvgContent prop'u varsa onu kullan
+  useEffect(() => {
+    if (initialSvgContent) {
+      setSvgContent(initialSvgContent);
+      setOriginalFileName("template.svg");
+      setStatus("SVG yüklendi. İşlemek için Hazırla butonuna tıklayın.");
+    }
+  }, [initialSvgContent]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

@@ -1,0 +1,173 @@
+/* Ana Uygulama Stilleri */
+.app {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background-color: #4a6baf;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.app-header nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.app-header a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem;
+}
+
+.app-header a:hover {
+  text-decoration: underline;
+}
+
+.app-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.app-footer {
+  background-color: #f5f5f5;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  border-top: 1px solid #ddd;
+}
+
+/* Ana Sayfa Stilleri */
+.home-page h1 {
+  margin-bottom: 1rem;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.template-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.template-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.template-card h3 {
+  padding: 1rem;
+  margin: 0;
+  background-color: #f0f0f0;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.template-preview {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: white;
+}
+
+.template-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.template-card a {
+  display: block;
+  background-color: #4a6baf;
+  color: white;
+  text-align: center;
+  padding: 0.75rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.template-card a:hover {
+  background-color: #3a5a9f;
+}
+
+/* Şablon ve Boyama Sayfası Stilleri */
+.template-page h1,
+.custom-template-page h1,
+.prepare-page h1 {
+  margin-bottom: 2rem;
+}
+
+.coloring-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.navigation {
+  margin-top: 2rem;
+}
+
+.navigation a {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.navigation a:hover {
+  background-color: #e0e0e0;
+}
+
+/* Yükleme ve Hata Durumları */
+.loading,
+.processing,
+.error {
+  text-align: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loading,
+.processing {
+  color: #666;
+}
+
+.error {
+  color: #c0392b;
+}
