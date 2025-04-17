@@ -524,36 +524,6 @@ const SVGColoringCanvas = ({
     }
   };
 
-  // Renk numaralarını ve önerilen kalıcı olarak göstermek için eklenen fonksiyon
-  const renderColorGuide = () => {
-    // SVG içindeki orijinal renklerden kılavuz oluştur
-    return (
-      <div className="mt-6 p-4 bg-white rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold mb-3 text-center">
-          Boyama Kılavuzu
-        </h3>
-        {customPalette.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-            {customPalette.map((color, index) => (
-              <div
-                key={index}
-                className="flex items-center space-x-2 border p-2 rounded hover:bg-gray-50"
-              >
-                <div
-                  className="w-8 h-8 rounded-full border border-gray-300 shadow-sm"
-                  style={{ backgroundColor: color }}
-                ></div>
-                <span className="text-sm font-medium">Renk {index + 1}</span>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-gray-500">Renk bulunamadı</p>
-        )}
-      </div>
-    );
-  };
-
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-4 rounded-lg overflow-hidden bg-white shadow-lg">
@@ -606,7 +576,6 @@ const SVGColoringCanvas = ({
           </div>
 
           {/* Renk Kılavuzu - SVG yüklendiğinde göster */}
-          {!isLoading && svgContent && renderColorGuide()}
         </div>
 
         <div className="p-4 bg-gray-50 border-t border-gray-200">
