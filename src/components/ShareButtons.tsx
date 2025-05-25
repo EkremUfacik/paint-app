@@ -26,7 +26,7 @@ const ShareButtons = ({ imageUrl, title }: ShareButtonsProps) => {
     <div className="flex justify-center gap-4">
       <button
         onClick={shareOnTwitter}
-        className="p-3 rounded-full bg-blue-400 hover:bg-blue-500 text-white transition-colors shadow-md"
+        className="p-3 rounded-full bg-blue-400 hover:bg-blue-500 text-white transition-colors shadow-md cursor-pointer"
         aria-label="Twitter'da paylaş"
       >
         <svg
@@ -46,7 +46,7 @@ const ShareButtons = ({ imageUrl, title }: ShareButtonsProps) => {
 
       <button
         onClick={shareOnFacebook}
-        className="p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors shadow-md"
+        className="p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors shadow-md cursor-pointer"
         aria-label="Facebook'ta paylaş"
       >
         <svg
@@ -66,7 +66,7 @@ const ShareButtons = ({ imageUrl, title }: ShareButtonsProps) => {
 
       <button
         onClick={shareOnWhatsApp}
-        className="p-3 rounded-full bg-green-500 hover:bg-green-600 text-white transition-colors shadow-md"
+        className="p-3 rounded-full bg-green-500 hover:bg-green-600 text-white transition-colors shadow-md cursor-pointer"
         aria-label="WhatsApp'ta paylaş"
       >
         <svg

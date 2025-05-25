@@ -581,9 +581,7 @@ const SVGColoringCanvas = ({
         <div className="p-4 bg-gray-50 border-t border-gray-200">
           <p className="text-center text-gray-700 mb-4">
             {selectedColorIndex !== null
-              ? `Şimdi ${
-                  selectedColorIndex + 1
-                } numaralı alanları boyayabilirsiniz`
+              ? `Şimdi işaretli alanları boyayabilirsiniz`
               : "Lütfen aşağıdan bir renk seçin"}
           </p>
 
@@ -592,7 +590,7 @@ const SVGColoringCanvas = ({
               customPalette.map((color, index) => (
                 <button
                   key={index}
-                  className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-all ${
+                  className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-all cursor-pointer ${
                     selectedColor === color
                       ? "ring-4 ring-blue-500 scale-110"
                       : "hover:scale-105"
@@ -607,13 +605,13 @@ const SVGColoringCanvas = ({
                 </button>
               ))
             ) : (
-              <p className="text-gray-500">Renk paleti bulunamadı</p>
+              <p className="text-gray-500">Boyama tamamlandı.</p>
             )}
           </div>
 
           <div className="flex justify-center gap-4">
             <button
-              className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors shadow-md"
+              className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors shadow-md cursor-pointer"
               onClick={handleReset}
               disabled={isLoading}
             >
@@ -621,7 +619,7 @@ const SVGColoringCanvas = ({
             </button>
 
             <button
-              className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors shadow-md"
+              className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors shadow-md cursor-pointer"
               onClick={handleDownload}
               disabled={isLoading || !hasChanges}
             >
@@ -629,7 +627,7 @@ const SVGColoringCanvas = ({
             </button>
 
             <button
-              className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors shadow-md"
+              className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors shadow-md cursor-pointer"
               onClick={handlePrepareShare}
               disabled={isLoading || !hasChanges}
             >

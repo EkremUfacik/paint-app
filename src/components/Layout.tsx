@@ -4,7 +4,7 @@ const Layout = () => {
   return (
     <div className="min-h-screen flex flex-col ">
       <header className="bg-accent2 text-white p-4 flex justify-between items-center shadow-md">
-        <h1 className="text-xl font-medium m-0">Sayıya Göre Boyama</h1>
+        <h1 className="text-xl font-medium m-0">Resim Boyama</h1>
         <nav className="flex gap-4">
           <Link to="/" className=" no-underline py-2 px-3 hover:underline">
             Ana Sayfa
@@ -23,7 +23,7 @@ const Layout = () => {
       </main>
 
       <footer className="bg-gray-100 p-4 text-center text-sm text-gray-600 border-t border-gray-200">
-        <p>&copy; {new Date().getFullYear()} SVG Boyama Uygulaması</p>
+        <p>&copy; {new Date().getFullYear()} Resim Boyama Uygulaması</p>
       </footer>
     </div>
   );
